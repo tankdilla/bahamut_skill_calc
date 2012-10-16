@@ -1,0 +1,17 @@
+= form_for [@card_level, @enhanced_card, @feeder_card_type, @feeder_card] do |f|
+  - if @feeder_card.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@feeder_card.errors.count, "error")} prohibited this feeder_card from being saved:"
+      %ul
+        - @feeder_card.errors.full_messages.each do |msg|
+          %li= msg
+  
+  - unless @eligible_card_levels.empty?
+    .field
+      = f.label :skill_level
+      = f.number_field :skill_level, :in=>@eligible_card_levels
+    .field
+      = f.label :skill_up_percentage
+      = f.text_field :skill_up_percentage
+    .actions
+      = f.submit 'Save'

@@ -1,0 +1,13 @@
+%table
+  %tr
+    %th Target skill level
+    %th
+    %th
+    %th
+
+  - enhanced_cards.each do |enhanced_card|
+    %tr
+      %td= enhanced_card.target_skill_level
+      %td= link_to 'Show', [enhanced_card.card_level, enhanced_card]
+      %td= link_to 'Edit', edit_card_level_enhanced_card_path(enhanced_card.card_level, enhanced_card)
+      %td= link_to 'Destroy', [enhanced_card.card_level, enhanced_card], method: :delete, data: { confirm: 'Are you sure?' }

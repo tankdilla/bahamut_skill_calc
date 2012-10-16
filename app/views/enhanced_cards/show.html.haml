@@ -1,0 +1,14 @@
+%p#notice= notice
+
+%p
+  %b Target skill level:
+  = @enhanced_card.target_skill_level
+
+%b Feeder types:
+= render :partial => "feeder_card_types/list", :locals=>{:feeder_card_types => @enhanced_card.feeder_card_types}
+
+= link_to 'Edit', edit_card_level_enhanced_card_path(@card_level, @enhanced_card)
+\|
+= link_to 'Back', card_level_enhanced_cards_path(@card_level)
+\|
+= link_to 'Add Feeder Card Type', new_card_level_enhanced_card_feeder_card_type_path(@card_level, @enhanced_card)

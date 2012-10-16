@@ -1,0 +1,11 @@
+%h1
+  = "listing #{@card_level.name.downcase} card skill levels"
+  
+= render :partial => 'enhanced_cards/list', :locals=>{:enhanced_cards => @enhanced_cards}
+%br
+
+= link_to 'Card Levels', card_levels_path
+
+- unless @card_level.eligible_card_levels.empty?
+  \|
+  = link_to 'New enhanced card level', new_card_level_enhanced_card_path(@card_level)

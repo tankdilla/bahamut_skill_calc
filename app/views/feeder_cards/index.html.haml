@@ -1,0 +1,12 @@
+%h1 
+  = "listing #{@feeder_card_type.name.downcase} feeder stats"
+
+= render :partial => 'feeder_cards/list', :locals=>{:feeder_cards => @feeder_cards}
+
+%br
+
+= link_to 'Card', card_level_enhanced_card_path(@card_level, @enhanced_card)
+
+- unless @feeder_card_type.eligible_card_levels.empty?
+  \|
+  = link_to 'New Feeder card', new_card_level_enhanced_card_feeder_card_type_feeder_card_path(@card_level, @enhanced_card, @feeder_card_type)

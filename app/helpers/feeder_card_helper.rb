@@ -1,0 +1,2 @@
+module FeederCardHelper
+end

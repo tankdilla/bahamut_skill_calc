@@ -1,0 +1,13 @@
+= form_for [@card_level, @enhanced_card, @feeder_card_type] do |f|
+  - if @card_level.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@feeder_card_type.errors.count, "error")} prohibited this card_level from being saved:"
+      %ul
+        - @card_level.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .actions
+    = f.submit 'Save'

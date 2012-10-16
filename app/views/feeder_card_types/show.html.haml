@@ -1,0 +1,13 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @feeder_card_type.name
+
+= render :partial => 'feeder_cards/list', :locals=>{:feeder_cards => @feeder_card_type.feeder_cards}
+
+= link_to 'Edit', edit_card_level_enhanced_card_feeder_card_type_path(@card_level, @enhanced_card, @feeder_card_type)
+\|
+= link_to 'Back', card_level_enhanced_card_feeder_card_types_path(@card_level, @enhanced_card)
+\|
+= link_to 'Add Feeder Stats', new_card_level_enhanced_card_feeder_card_type_feeder_card_path(@card_level, @enhanced_card, @feeder_card_type)

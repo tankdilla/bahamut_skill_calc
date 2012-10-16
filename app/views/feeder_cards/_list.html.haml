@@ -1,0 +1,18 @@
+%table
+  %tr
+    %th Skill level
+    %th Skill up percentage
+    %th
+    %th
+    %th
+
+  - feeder_cards.each do |feeder_card|
+    - feeder_type = feeder_card.feeder_card_type
+    - enhanced_card = feeder_type.enhanced_card
+    - card_level = enhanced_card.card_level
+    %tr
+      %td= feeder_card.skill_level
+      %td= feeder_card.skill_up_percentage
+      %td= link_to 'Show', [card_level, enhanced_card, feeder_type, feeder_card]
+      %td= link_to 'Edit', edit_card_level_enhanced_card_feeder_card_type_feeder_card_path(card_level, enhanced_card, feeder_type, feeder_card)
+      %td= link_to 'Destroy', [card_level, enhanced_card, feeder_type, feeder_card], method: :delete, data: { confirm: 'Are you sure?' }
