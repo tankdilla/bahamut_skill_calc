@@ -2,7 +2,7 @@
 %p
   Determine possible strategies for skilling up your card
 
-- unless @card_levels.empty?
+- unless @card_levels.blank?
   = form_for :calcer, :url => start_calculate_path do |f|
     .field
       = f.label "Select card type to enhance: "
