@@ -21,7 +21,8 @@ gem 'jquery-rails'
 gem "haml", ">= 3.0.0"
 gem "haml-rails"
 gem "mongoid", ">= 3.0.3"
-gem "debugger"
+#gem "debugger"
+gem 'heroku'
 
 group :test do
   gem "rspec-rails", ">= 2.11.0"

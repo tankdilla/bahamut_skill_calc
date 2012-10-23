@@ -9,11 +9,10 @@
 
   - @card_levels.each do |card_level|
     %tr
-      %td= card_level.name
-      %td= link_to 'Show', card_level
-      %td= link_to 'Edit', edit_card_level_path(card_level)
-      %td= link_to 'Destroy', card_level, method: :delete, data: { confirm: 'Are you sure?' }
+      %td= link_to card_level.name, card_level
 
 %br
 
 = link_to 'New Card level', new_card_level_path
+\|
+= link_to 'Home', root_path

@@ -38,9 +38,8 @@ class FeederCardsController < ApplicationController
 
   # GET /feeder_cards/1/edit
   def edit
-    @feeder_card = @feeder_card_type.feeder_cards.find(params[:id])
-    
-    setup_entry
+    @feeder_card = @feeder_card_type.feeder_cards.find(params[:id])    
+    @eligible_card_levels = 1.upto(10).collect{|x| x}
   end
 
   # POST /feeder_cards

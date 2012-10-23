@@ -1,2 +1,20 @@
-%h1 Start#results
-%p Find me in app/views/start/results.html.haml
+%p
+  = "Strategies for skilling up a #{@card_level} from #{@skill_level} to #{@skill_level.to_i+1}" 
+  
+- unless @calc_results.blank?
+  %ul
+    - @calc_results.each do |strategy|
+      %li
+        = "Strategy: #{strategy[:strategy_name]}. Skill-up percentage: #{strategy[:percentage]}%"
+        %br
+        Cards:
+        %ul
+          - strategy[:cards].each_pair do |h, k|
+            - k.each_pair do |i, m|
+              - unless m.nil?
+                %li
+                  = "#{m[:size]} #{h.to_s.humanize.pluralize}, #{i.to_s.humanize}, #{m[:card].skill_up_percentage}% each"
+                  /"#{card.feeder_card_type.name} skill #{card.skill_level}, skill-up chance: #{card.skill_up_percentage}%"
+              
+%p
+  = link_to "Home", root_path

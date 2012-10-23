@@ -2,7 +2,7 @@ BahamutCardSkillCalc::Application.routes.draw do
 
   get "start/index"
 
-  get "start/calculate"
+  post "start/calculate"
 
   get "start/results"
 
@@ -62,7 +62,7 @@ BahamutCardSkillCalc::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'card_levels#index'
+  root :to => 'start#index'
 
   # See how all your routes lay out with "rake routes"
 

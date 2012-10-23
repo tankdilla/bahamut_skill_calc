@@ -1,10 +1,17 @@
 class StartController < ApplicationController
   def index
     calcer = Calcer.new
-    @eligible_card_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @card_levels = CardLevel.all
+    @eligible_card_levels = 1.upto(10).collect{|x| x}
   end
 
   def calculate
+    @card_level = params[:calcer][:card_level]
+    @skill_level = params[:calcer][:skill_level]
+    #c = Calcer.new(params[:calcer])
+   
+    @calc_results = Calcer.determine_strategies(params[:calcer][:card_level], params[:calcer][:skill_level])
+    render :action => 'results'
   end
 
   def results
