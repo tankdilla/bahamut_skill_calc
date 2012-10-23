@@ -2,14 +2,15 @@
 %p
   Determine possible strategies for skilling up your card
 
-= form_for :calcer, :url => start_calculate_path do |f|
-  .field
-    = f.label "Select card type to enhance: "
-    = f.collection_select :card_level, @card_levels, :id, :name
-  .field
-    = f.label "Current skill: "
-    = f.number_field :skill_level, :in=>@eligible_card_levels
-  .actions
-    = f.submit 'Show me skill-up strategies'
+- unless @card_levels.empty?
+  = form_for :calcer, :url => start_calculate_path do |f|
+    .field
+      = f.label "Select card type to enhance: "
+      = f.collection_select :card_level, @card_levels, :id, :name
+    .field
+      = f.label "Current skill: "
+      = f.number_field :skill_level, :in=>@eligible_card_levels
+    .actions
+      = f.submit 'Show me skill-up strategies'
 
 = link_to "Card Tables", card_levels_path
