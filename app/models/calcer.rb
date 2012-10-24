@@ -21,6 +21,7 @@ class Calcer
       any_cards.delete(:size)
       strategies << {:strategy_name=>"Any Cards, Skill less than or equal to target skill", :cards=>any_cards, :percentage=>any_cards_pctg}
       
+      if !['high_normal'].include?(card_level_id)
       max_feeder_rares_max_skill_4, max_feeder_rares_max_skill_4_pctg =
           skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, 
               options.merge(:max_feeder_level=>'rare', :highest_feeder_skill_level=>4))
@@ -28,7 +29,9 @@ class Calcer
       strategies << 
         {:strategy_name=>"Max feeder rare, max skill 4", 
          :cards=>max_feeder_rares_max_skill_4, :percentage=>max_feeder_rares_max_skill_4_pctg}
-         
+      end
+      
+      if !['high_normal', 'rare'].include?(card_level_id)
       max_feeder_high_rares_max_skill_4, max_feeder_high_rares_max_skill_4_pctg =
           skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, 
               options.merge(:max_feeder_level=>'high_rare', :highest_feeder_skill_level=>4))
@@ -36,6 +39,7 @@ class Calcer
       strategies << 
         {:strategy_name=>"Max feeder high rare, max skill 4", 
          :cards=>max_feeder_high_rares_max_skill_4, :percentage=>max_feeder_high_rares_max_skill_4_pctg}
+      end
       
       strategies
     end
