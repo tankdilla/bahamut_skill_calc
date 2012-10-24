@@ -19,7 +19,7 @@ class Calcer
       
       any_cards, any_cards_pctg = skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, options)
       any_cards.delete(:size)
-      strategies << {:strategy_name=>"Any Cards, Skill less than or equal to target skill", :cards=>any_cards, :percentage=>any_cards_pctg}
+      strategies << {:strategy_name=>"Same card level or less, Skill less than or equal to target skill", :cards=>any_cards, :percentage=>any_cards_pctg}
       
       if !['high_normal'].include?(card_level_id)
       max_feeder_rares_max_skill_4, max_feeder_rares_max_skill_4_pctg =
@@ -49,6 +49,33 @@ class Calcer
     end
     
     def skill_up_cost(cards)
+      #Cost estimations given in terms of cost for HNs, Rs, and HRs
+      
+      #Given:
+      #9 HN = 2 HP cards[:high_normal][:skill_#{x}]
+      #1 R = 1 HP  cards[:rare][:skill_#{x}]
+      #1 HR = 3 HP cards[:high_rare][:skill_#{x}]
+      
+      #pseudocode
+        #   if skill x != 1
+        #     #get card cost for skill x
+        #     #recursively call till u get to skill 1
+        # 
+        #case HR
+        #  if skill == 1
+            #hr sk 1 counter += 1 (units in HP)
+        #case R
+        #  if skill == 1
+            #r sk 1 counter += 1 (units in HP)
+        #case HN
+        #  if skill == 1
+            #hn sk 1 counter += 1 (units in HP)
+      
+      cost = 0
+      
+      9.downto(2).each do |skill|
+        
+      end      
       
     end
     
@@ -182,23 +209,19 @@ class Calcer
       return_cards = Hash.new
       return_cards[:size] = 0
       
-      return_cards[:legend] = Hash.new
-      1.upto(10){|x| return_cards[:legend]["skill_#{x}".to_sym] = nil}
+      rarities = {
+        :high_normal  => 1,
+        :rare         => 2,
+        :high_rare    => 3,
+        :s_rare       => 4,
+        :ss_rare      => 5,
+        :legend       => 6
+      }
       
-      return_cards[:ss_rare] = Hash.new
-      1.upto(10){|x| return_cards[:ss_rare]["skill_#{x}".to_sym] = nil}
-      
-      return_cards[:s_rare] = Hash.new
-      1.upto(10){|x| return_cards[:s_rare]["skill_#{x}".to_sym] = nil}
-      
-      return_cards[:high_rare] = Hash.new
-      1.upto(10){|x| return_cards[:high_rare]["skill_#{x}".to_sym] = nil}
-      
-      return_cards[:rare] = Hash.new
-      1.upto(10){|x| return_cards[:rare]["skill_#{x}".to_sym] = nil}
-      
-      return_cards[:high_normal] = Hash.new
-      1.upto(10){|x| return_cards[:high_normal]["skill_#{x}".to_sym] = nil}
+      rarities.keys.each do |key|
+        return_cards[key] = Hash.new
+        1.upto(10){|x| return_cards[key]["skill_#{x}".to_sym] = nil}
+      end
       
       return_cards
     end
