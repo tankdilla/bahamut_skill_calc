@@ -19,7 +19,23 @@ class Calcer
       
       any_cards, any_cards_pctg = skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, options)
       any_cards.delete(:size)
-      strategies << {:strategy_name=>"Any Cards, Skill less than target skill", :cards=>any_cards, :percentage=>any_cards_pctg}
+      strategies << {:strategy_name=>"Any Cards, Skill less than or equal to target skill", :cards=>any_cards, :percentage=>any_cards_pctg}
+      
+      max_feeder_rares_max_skill_4, max_feeder_rares_max_skill_4_pctg =
+          skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, 
+              options.merge(:max_feeder_level=>'rare', :highest_feeder_skill_level=>4))
+      max_feeder_rares_max_skill_4.delete(:size)
+      strategies << 
+        {:strategy_name=>"Max feeder rare, max skill 4", 
+         :cards=>max_feeder_rares_max_skill_4, :percentage=>max_feeder_rares_max_skill_4_pctg}
+         
+      max_feeder_high_rares_max_skill_4, max_feeder_high_rares_max_skill_4_pctg =
+          skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, 
+              options.merge(:max_feeder_level=>'high_rare', :highest_feeder_skill_level=>4))
+      max_feeder_high_rares_max_skill_4.delete(:size)
+      strategies << 
+        {:strategy_name=>"Max feeder high rare, max skill 4", 
+         :cards=>max_feeder_high_rares_max_skill_4, :percentage=>max_feeder_high_rares_max_skill_4_pctg}
       
       strategies
     end
@@ -73,6 +89,7 @@ class Calcer
     end
     
     def skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, options={})
+      
       current_card_level = card_at_target_skill_lvl.card_level
       
       unless options[:max_feeders].blank?
@@ -80,8 +97,16 @@ class Calcer
       else
         max_feeders = 10
       end
+      
+      if options[:max_feeder_level]
+        card_level_feeder = card_at_target_skill_lvl.feeder_card_types.where(id: options[:max_feeder_level]).first
+      else
+        card_level_feeder = card_at_target_skill_lvl.feeder_card_types.where(id: current_card_level.id).first
+      end
+      
       #debugger
-      card_level_feeder = card_at_target_skill_lvl.feeder_card_types.where(id: current_card_level.id).first
+      #card_level_feeder = card_at_target_skill_lvl.feeder_card_types.where(id: current_card_level.id).first
+      
       highest_feeder_skill = card_level_feeder.feeder_cards
       
       unless options[:highest_feeder_skill_level].blank?
@@ -129,11 +154,16 @@ class Calcer
                 'rare'
               when 's_rare'
                 'high_rare'
+              when 'ss_rare'
+                's_rare'
+              when 'legend'
+                'ss_rare'
             end
           
           card_level_feeder = card_at_target_skill_lvl.feeder_card_types.where(id: current_card_level_name).first
-          current_skill = highest_feeder_skill
+          current_skill = highest_feeder_skill.skill_level
           card_level_feeder_sk_x = card_level_feeder.feeder_cards.where(skill_level: current_skill).first
+          
           feeder_skill_up_pctg = card_level_feeder_sk_x.skill_up_percentage
           puts "Lowering skill lookup to #{current_skill} for #{current_card_level_name}"
         else
@@ -147,7 +177,19 @@ class Calcer
     def initialize_return_cards
       return_cards = Hash.new
       return_cards[:size] = 0
-      #for now, only considering rares and high normals
+      
+      return_cards[:legend] = Hash.new
+      1.upto(10){|x| return_cards[:legend]["skill_#{x}".to_sym] = nil}
+      
+      return_cards[:ss_rare] = Hash.new
+      1.upto(10){|x| return_cards[:ss_rare]["skill_#{x}".to_sym] = nil}
+      
+      return_cards[:s_rare] = Hash.new
+      1.upto(10){|x| return_cards[:s_rare]["skill_#{x}".to_sym] = nil}
+      
+      return_cards[:high_rare] = Hash.new
+      1.upto(10){|x| return_cards[:high_rare]["skill_#{x}".to_sym] = nil}
+      
       return_cards[:rare] = Hash.new
       1.upto(10){|x| return_cards[:rare]["skill_#{x}".to_sym] = nil}
       
@@ -158,7 +200,7 @@ class Calcer
     end
     
     def add_feeder(feeder_card, cards_returned)
-      
+      #debugger
       if cards_returned["#{feeder_card.feeder_card_type.id}".to_sym]["skill_#{feeder_card.skill_level}".to_sym].nil?
         cards_returned["#{feeder_card.feeder_card_type.id}".to_sym]["skill_#{feeder_card.skill_level}".to_sym] = {:size=>1, :card=>feeder_card}
       else

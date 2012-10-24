@@ -1,11 +1,19 @@
 %p
-  = "Strategies for skilling up a #{@card_level} from #{@skill_level} to #{@skill_level.to_i+1}" 
+  Strategies for skilling up a 
+  %b= @card_level.titleize 
+  from 
+  %b= @skill_level
+  to 
+  %b= @skill_level.to_i+1
   
 - unless @calc_results.blank?
   %ul
     - @calc_results.each do |strategy|
       %li
-        = "Strategy: #{strategy[:strategy_name]}. Skill-up percentage: #{strategy[:percentage]}%"
+        Strategy:
+        %u= strategy[:strategy_name]
+        , Skill-up percentage:
+        %b= "#{strategy[:percentage]}%"
         %br
         Cards:
         %ul
