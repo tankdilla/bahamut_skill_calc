@@ -78,7 +78,10 @@ GEM
     factory_girl_rails (4.1.0)
       factory_girl (~> 4.1.0)
       railties (>= 3.0.0)
+    ffi (1.1.5)
     ffi (1.1.5-x86-mingw32)
+    gherkin (2.11.5)
+      json (>= 1.4.6)
     gherkin (2.11.5-x86-mingw32)
       json (>= 1.4.6)
     haml (3.1.7)
@@ -123,6 +126,7 @@ GEM
     moped (1.2.7)
     multi_json (1.3.6)
     netrc (0.7.7)
+    nokogiri (1.5.5)
     nokogiri (1.5.5-x86-mingw32)
     origin (1.0.9)
     polyglot (0.3.3)
@@ -194,6 +198,7 @@ GEM
       nokogiri (~> 1.3)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES

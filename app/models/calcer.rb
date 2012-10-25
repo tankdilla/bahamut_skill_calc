@@ -9,43 +9,46 @@ class Calcer
       options = {}
       
       options[:highest_feeder_skill_level] = current_skill_level
-      options[:max_feeders] = ""
+      #options[:max_feeders] = ""
       
       strategies = Array.new
-            
-      hn_sk1_only_cards, hn_sk1_pctg = skill_up_by_sk1_high_normals_only(card_at_target_skill_lvl, options)
-      hn_sk1_only_cards.delete(:size)
-      strategies << {:strategy_name=>"Skill 1 High Normals", :cards=>hn_sk1_only_cards, :percentage=>hn_sk1_pctg}
       
-      any_cards, any_cards_pctg = skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, options)
-      any_cards.delete(:size)
-      strategies << {:strategy_name=>"Same card level or less, Skill less than or equal to target skill", :cards=>any_cards, :percentage=>any_cards_pctg}
+      strategies << set_up_strategy(
+              "Max feeder rare, max skill 4", 
+              card_at_target_skill_lvl,
+              options.merge(:max_feeder_level=>'high_normal', :highest_feeder_skill_level=>1))
+
+
+      card_strategy = set_up_strategy(
+              "Same card level or less, Skill less than or equal to target skill", 
+              card_at_target_skill_lvl,
+              options)
       
+      strategies << card_strategy
+      cost = skill_up_cost(card_strategy[:cards])
+      puts "Cost = #{cost}"
+
       if !['high_normal'].include?(card_level_id)
-      max_feeder_rares_max_skill_4, max_feeder_rares_max_skill_4_pctg =
-          skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, 
+          strategies << set_up_strategy(
+              "Max feeder rare, max skill 4", 
+              card_at_target_skill_lvl,
               options.merge(:max_feeder_level=>'rare', :highest_feeder_skill_level=>4))
-      max_feeder_rares_max_skill_4.delete(:size)
-      strategies << 
-        {:strategy_name=>"Max feeder rare, max skill 4", 
-         :cards=>max_feeder_rares_max_skill_4, :percentage=>max_feeder_rares_max_skill_4_pctg}
       end
       
       if !['high_normal', 'rare'].include?(card_level_id)
-      max_feeder_high_rares_max_skill_4, max_feeder_high_rares_max_skill_4_pctg =
-          skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, 
+          strategies << set_up_strategy(
+              "Max feeder high rare, max skill 4",
+              card_at_target_skill_lvl,
               options.merge(:max_feeder_level=>'high_rare', :highest_feeder_skill_level=>4))
-      max_feeder_high_rares_max_skill_4.delete(:size)
-      strategies << 
-        {:strategy_name=>"Max feeder high rare, max skill 4", 
-         :cards=>max_feeder_high_rares_max_skill_4, :percentage=>max_feeder_high_rares_max_skill_4_pctg}
       end
-      
+
       strategies
     end
         
-    def skill_up_results(card_level, target_skill, options)
-      
+    def set_up_strategy(strategy_name, card_at_target_skill_level, options)
+      cards, pctg = skill_up_by_sk_x_and_less_card_level(card_at_target_skill_level, options)
+      cards.delete(:size)
+      {:strategy_name=>strategy_name, :cards=>cards, :percentage=>pctg}
     end
     
     def skill_up_cost(cards)
@@ -70,13 +73,45 @@ class Calcer
         #case HN
         #  if skill == 1
             #hn sk 1 counter += 1 (units in HP)
-      
       cost = 0
       
-      9.downto(2).each do |skill|
-        
-      end      
+      cost_keys = [:high_normal, :rare, :high_rare, :s_rare]
+      cost_keys.each do |key|
+        9.downto(1).each do |skill|
+          skill_card = cards[key]["skill_#{skill}".to_sym]
+          
+          if !skill_card.nil?
+            if skill_card[:card].skill_level != 1
+              #debugger
+              card_level = CardLevel.where(id: skill_card[:card].feeder_card_type.id).first
+              target_card_skill = card_level.enhanced_cards.where(target_skill_level: skill_card[:card].skill_level).first
+              cost += skill_card[:size] * skill_up_cost(
+                set_up_strategy(
+                  "cost",
+                  target_card_skill,
+                  {:highest_feeder_skill_level => (skill_card[:card].skill_level-1)}
+                )[:cards]
+              )
+            else
+              #debugger
+              cost += skill_card[:size] *
+                if key.to_s == "s_rare"
+                  15
+                elsif key.to_s == "high_rare"
+                  3
+                elsif key.to_s == "rare"
+                  1
+                elsif key.to_s == "high_normal"
+                  2/9.0
+                else
+                  0
+                end
+            end
+          end
+        end
+      end
       
+      cost
     end
     
     def skill_up_by_highest_percentage(options)

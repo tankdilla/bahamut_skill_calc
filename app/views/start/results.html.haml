@@ -14,15 +14,15 @@
         %b= strategy[:strategy_name]
         , Skill-up percentage:
         %b= "#{strategy[:percentage]}%"
-        %br
-        Cards:
+        , Guestimated HP Cost:
+        %b= Calcer.skill_up_cost(strategy[:cards]).round(1)
+        HP
         %ul
           - strategy[:cards].each_pair do |h, k|
             - k.each_pair do |i, m|
               - unless m.nil?
                 %li
                   = "#{m[:size]} #{h.to_s.humanize.pluralize}, #{i.to_s.humanize}, #{m[:card].skill_up_percentage}% each"
-                  /"#{card.feeder_card_type.name} skill #{card.skill_level}, skill-up chance: #{card.skill_up_percentage}%"
               
 %p
   = link_to "Home", root_path
