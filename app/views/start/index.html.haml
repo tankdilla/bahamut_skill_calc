@@ -9,7 +9,7 @@
       = f.collection_select :card_level, @card_levels, :id, :name
     .field
       = f.label "Current skill: "
-      = f.number_field :skill_level, :in=>@eligible_card_levels
+      = f.select :skill_level, @eligible_card_levels.collect{|level| [level, level]}
     .actions
       = f.submit 'Show me skill-up strategies'
 

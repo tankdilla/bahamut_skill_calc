@@ -26,7 +26,7 @@ class Calcer
       
       strategies << card_strategy
       cost = skill_up_cost(card_strategy[:cards])
-      puts "Cost = #{cost}"
+      #puts "Cost = #{cost}"
 
       if !['high_normal'].include?(card_level_id)
           strategies << set_up_strategy(
@@ -123,20 +123,20 @@ class Calcer
       
       until cards_returned[:size] == 10
         if feeder_skill_up_pctg.skill_up_percentage + percentage_attained < 100
-          puts "Adding card level high_normal skill 1"
+          #puts "Adding card level high_normal skill 1"
           percentage_attained += feeder_skill_up_pctg.skill_up_percentage
           
           #cards_returned << feeder_skill_up_pctg
           add_feeder(feeder_skill_up_pctg, cards_returned)
           
-          puts "feeders: #{cards_returned.size}, pct: #{percentage_attained}"
+          #puts "feeders: #{cards_returned.size}, pct: #{percentage_attained}"
         else
-          puts "skill-up percentage at #{percentage_attained}, breaking"
+          #puts "skill-up percentage at #{percentage_attained}, breaking"
           break
         end
       end
       
-      puts "Number of feeders: #{cards_returned.size}"
+      #puts "Number of feeders: #{cards_returned.size}"
       [cards_returned, percentage_attained]
     end
     
@@ -185,16 +185,16 @@ class Calcer
       until cards_returned[:size] == max_feeders
         
         if feeder_skill_up_pctg + percentage_attained < 100
-          puts "Adding card level #{current_card_level_name} skill #{current_skill}"
+          #puts "Adding card level #{current_card_level_name} skill #{current_skill}"
           percentage_attained += card_level_feeder_sk_x.skill_up_percentage
           
           #cards_returned << card_level_feeder_sk_x
           add_feeder(card_level_feeder_sk_x, cards_returned)
           
-          puts "feeders: #{cards_returned.size}, pct: #{percentage_attained}"
+          #puts "feeders: #{cards_returned.size}, pct: #{percentage_attained}"
         elsif current_skill > 1
           current_skill -= 1
-          puts "Lowering skill lookup to #{current_skill} for #{current_card_level_name}"
+          #puts "Lowering skill lookup to #{current_skill} for #{current_card_level_name}"
           card_level_feeder_sk_x = card_level_feeder.feeder_cards.where(skill_level: current_skill).first
           feeder_skill_up_pctg = card_level_feeder_sk_x.skill_up_percentage
         elsif current_skill == 1 && current_card_level_name != 'high_normal'
@@ -217,12 +217,12 @@ class Calcer
           card_level_feeder_sk_x = card_level_feeder.feeder_cards.where(skill_level: current_skill).first
           
           feeder_skill_up_pctg = card_level_feeder_sk_x.skill_up_percentage
-          puts "Lowering skill lookup to #{current_skill} for #{current_card_level_name}"
+          #puts "Lowering skill lookup to #{current_skill} for #{current_card_level_name}"
         else
           break
         end
       end
-      puts "Returning #{cards_returned.size} feeders, with a percentage of #{percentage_attained}"
+      #puts "Returning #{cards_returned.size} feeders, with a percentage of #{percentage_attained}"
       [cards_returned, percentage_attained]
     end
     

@@ -2,7 +2,7 @@ class StartController < ApplicationController
   def index
     calcer = Calcer.new
     @card_levels = CardLevel.all
-    @eligible_card_levels = 1.upto(10).collect{|x| x}
+    @eligible_card_levels = 1.upto(9).collect{|x| x}
   end
 
   def calculate
