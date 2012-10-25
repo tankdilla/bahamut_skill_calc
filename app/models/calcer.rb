@@ -59,20 +59,6 @@ class Calcer
       #1 R = 1 HP  cards[:rare][:skill_#{x}]
       #1 HR = 3 HP cards[:high_rare][:skill_#{x}]
       
-      #pseudocode
-        #   if skill x != 1
-        #     #get card cost for skill x
-        #     #recursively call till u get to skill 1
-        # 
-        #case HR
-        #  if skill == 1
-            #hr sk 1 counter += 1 (units in HP)
-        #case R
-        #  if skill == 1
-            #r sk 1 counter += 1 (units in HP)
-        #case HN
-        #  if skill == 1
-            #hn sk 1 counter += 1 (units in HP)
       cost = 0
       
       cost_keys = [:high_normal, :rare, :high_rare, :s_rare]
@@ -89,7 +75,7 @@ class Calcer
                 set_up_strategy(
                   "cost",
                   target_card_skill,
-                  {:highest_feeder_skill_level => (skill_card[:card].skill_level-1)}
+                  {:max_feeder_level=>'high_normal', :highest_feeder_skill_level => (skill_card[:card].skill_level-1)}
                 )[:cards]
               )
             else
