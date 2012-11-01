@@ -108,38 +108,6 @@ class Calcer
       
     end
     
-    def skill_up_by_sk1_high_normals_only(card_at_target_skill_lvl, options)
-      #using all high normals skill 1
-      hn_feeder = card_at_target_skill_lvl.feeder_card_types.where(id: "high_normal").first
-      feeder_skill_up_pctg = hn_feeder.feeder_cards.where(skill_level: 1).first
-      
-      cards_added = 0
-      percentage_attained = 0
-      
-      #cards_returned = Array.new
-      cards_returned = initialize_return_cards
-      add_feeder(feeder_skill_up_pctg, cards_returned)
-      percentage_attained += feeder_skill_up_pctg.skill_up_percentage
-      
-      until cards_returned[:size] == 10
-        if feeder_skill_up_pctg.skill_up_percentage + percentage_attained < 100
-          #puts "Adding card level high_normal skill 1"
-          percentage_attained += feeder_skill_up_pctg.skill_up_percentage
-          
-          #cards_returned << feeder_skill_up_pctg
-          add_feeder(feeder_skill_up_pctg, cards_returned)
-          
-          #puts "feeders: #{cards_returned.size}, pct: #{percentage_attained}"
-        else
-          #puts "skill-up percentage at #{percentage_attained}, breaking"
-          break
-        end
-      end
-      
-      #puts "Number of feeders: #{cards_returned.size}"
-      [cards_returned, percentage_attained]
-    end
-    
     def skill_up_by_sk_x_and_less_card_level(card_at_target_skill_lvl, options={})
       
       current_card_level = card_at_target_skill_lvl.card_level
@@ -166,6 +134,8 @@ class Calcer
       end
       
       #highest_feeder_skill = highest_feeder_skill.order_by(skill_up_percentage: :desc).first #, skill_level: :asc).first
+      
+      #Mongoid doesn't seem to be sorting by skill up percentage, so doing my own sort
       highest_feeder_skill = highest_feeder_skill.entries.sort{|x, y| y.skill_up_percentage.to_f <=> x.skill_up_percentage.to_f}.first
       card_level_feeder_sk_x = highest_feeder_skill
       feeder_skill_up_pctg = card_level_feeder_sk_x.skill_up_percentage
@@ -175,10 +145,8 @@ class Calcer
       current_skill = highest_feeder_skill.skill_level
       current_card_level_name = current_card_level.id
       
-      #cards_returned = Array.new
       cards_returned = initialize_return_cards
       
-      #cards_returned << card_level_feeder_sk_x
       add_feeder(card_level_feeder_sk_x, cards_returned)
       percentage_attained += feeder_skill_up_pctg
       
@@ -186,7 +154,8 @@ class Calcer
         
         if feeder_skill_up_pctg + percentage_attained < 100
           #puts "Adding card level #{current_card_level_name} skill #{current_skill}"
-          percentage_attained += card_level_feeder_sk_x.skill_up_percentage
+          #percentage_attained += card_level_feeder_sk_x.skill_up_percentage
+          percentage_attained += feeder_skill_up_pctg
           
           #cards_returned << card_level_feeder_sk_x
           add_feeder(card_level_feeder_sk_x, cards_returned)
@@ -219,6 +188,7 @@ class Calcer
           feeder_skill_up_pctg = card_level_feeder_sk_x.skill_up_percentage
           #puts "Lowering skill lookup to #{current_skill} for #{current_card_level_name}"
         else
+          
           break
         end
       end

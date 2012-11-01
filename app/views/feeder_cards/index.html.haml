@@ -7,6 +7,6 @@
 
 = link_to 'Card', card_level_enhanced_card_path(@card_level, @enhanced_card)
 
-- unless @feeder_card_type.eligible_card_levels.empty?
-  \|
-  = link_to 'New Feeder card', new_card_level_enhanced_card_feeder_card_type_feeder_card_path(@card_level, @enhanced_card, @feeder_card_type)
+/- unless @feeder_card_type.eligible_card_levels.empty?
+/  \|
+/  = link_to 'New Feeder card', new_card_level_enhanced_card_feeder_card_type_feeder_card_path(@card_level, @enhanced_card, @feeder_card_type)

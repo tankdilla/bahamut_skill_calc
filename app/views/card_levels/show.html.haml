@@ -7,9 +7,9 @@
 = render :partial => 'enhanced_cards/list', :locals=>{:enhanced_cards => @card_level.enhanced_cards}
 
 = link_to 'Edit', edit_card_level_path(@card_level)
-\|
-= link_to 'Destroy', @card_level, method: :delete, data: { confirm: 'Are you sure?' }
+/\|
+/= link_to 'Destroy', @card_level, method: :delete, data: { confirm: 'Are you sure?' }
 \|
 = link_to 'Back', card_levels_path
-\|
-= link_to 'Add Card Target Skill Level', new_card_level_enhanced_card_path(@card_level)
+/\|
+/= link_to 'Add Card Target Skill Level', new_card_level_enhanced_card_path(@card_level)
