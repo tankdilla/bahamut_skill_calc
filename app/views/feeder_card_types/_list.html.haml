@@ -9,7 +9,7 @@
     - card_level = feeder_card_type.enhanced_card.card_level
     - enhanced_card = feeder_card_type.enhanced_card
     %tr
-      %td= feeder_card_type.name
-      %td= link_to 'Show', [card_level, enhanced_card, feeder_card_type]
-      %td= link_to 'Edit', edit_card_level_enhanced_card_feeder_card_type_path(card_level, enhanced_card, feeder_card_type)
-      %td= link_to 'Destroy', [card_level, enhanced_card, feeder_card_type], method: :delete, data: { confirm: 'Are you sure?' }
+      %td= link_to feeder_card_type.name, [card_level, enhanced_card, feeder_card_type]
+      /%td= link_to 'Show', [card_level, enhanced_card, feeder_card_type]
+      /%td= link_to 'Edit', edit_card_level_enhanced_card_feeder_card_type_path(card_level, enhanced_card, feeder_card_type)
+      /%td= link_to 'Destroy', [card_level, enhanced_card, feeder_card_type], method: :delete, data: { confirm: 'Are you sure?' }
