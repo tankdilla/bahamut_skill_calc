@@ -1,6 +1,8 @@
 class Calcer
+  attr_accessor :target_percentage, :card_level, :skill_level
+  
   class << self
-    def determine_strategies(card_level_id, current_skill_level)
+    def determine_strategies(card_level_id, current_skill_level, target_percentage=nil, cost_target_percentage=nil)
       card_level = CardLevel.where(id: card_level_id).first
       card_at_target_skill_lvl = card_level.enhanced_cards.where(target_skill_level: current_skill_level.to_i + 1).first
       
@@ -9,6 +11,9 @@ class Calcer
       options = {}
       
       options[:highest_feeder_skill_level] = current_skill_level
+      options[:target_percentage] = target_percentage
+      @cost_target_percentage = cost_target_percentage || 100
+      
       #options[:max_feeders] = ""
       
       strategies = Array.new
@@ -35,11 +40,39 @@ class Calcer
               options.merge(:max_feeder_level=>'rare', :highest_feeder_skill_level=>4))
       end
       
+      if !['high_normal'].include?(card_level_id)
+          strategies << set_up_strategy(
+              "Max feeder rare, max skill 3", 
+              card_at_target_skill_lvl,
+              options.merge(:max_feeder_level=>'rare', :highest_feeder_skill_level=>3))
+      end
+      
+      if !['high_normal'].include?(card_level_id)
+          strategies << set_up_strategy(
+              "Max feeder rare, max skill 2", 
+              card_at_target_skill_lvl,
+              options.merge(:max_feeder_level=>'rare', :highest_feeder_skill_level=>2))
+      end
+      
       if !['high_normal', 'rare'].include?(card_level_id)
           strategies << set_up_strategy(
               "Max feeder high rare, max skill 4",
               card_at_target_skill_lvl,
               options.merge(:max_feeder_level=>'high_rare', :highest_feeder_skill_level=>4))
+      end
+      
+      if !['high_normal', 'rare'].include?(card_level_id)
+          strategies << set_up_strategy(
+              "Max feeder high rare, max skill 3",
+              card_at_target_skill_lvl,
+              options.merge(:max_feeder_level=>'high_rare', :highest_feeder_skill_level=>3))
+      end
+      
+      if !['high_normal', 'rare'].include?(card_level_id)
+          strategies << set_up_strategy(
+              "Max feeder high rare, max skill 2",
+              card_at_target_skill_lvl,
+              options.merge(:max_feeder_level=>'high_rare', :highest_feeder_skill_level=>2))
       end
 
       strategies
@@ -75,7 +108,7 @@ class Calcer
                 set_up_strategy(
                   "cost",
                   target_card_skill,
-                  {:max_feeder_level=>'high_normal', :highest_feeder_skill_level => (skill_card[:card].skill_level-1)}
+                  {:max_feeder_level=>'high_normal', :highest_feeder_skill_level => (skill_card[:card].skill_level-1), :target_percentage => @cost_target_percentage}
                 )[:cards]
               )
             else
@@ -150,9 +183,15 @@ class Calcer
       add_feeder(card_level_feeder_sk_x, cards_returned)
       percentage_attained += feeder_skill_up_pctg
       
+      if !options[:target_percentage].blank?
+        target_percentage = options[:target_percentage].to_i
+      else
+        target_percentage = 100
+      end
+      
       until cards_returned[:size] == max_feeders
         
-        if feeder_skill_up_pctg + percentage_attained < 100
+        if feeder_skill_up_pctg + percentage_attained < target_percentage
           #puts "Adding card level #{current_card_level_name} skill #{current_skill}"
           #percentage_attained += card_level_feeder_sk_x.skill_up_percentage
           percentage_attained += feeder_skill_up_pctg

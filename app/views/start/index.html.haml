@@ -10,6 +10,10 @@
     .field
       = f.label "Current skill: "
       = f.select :skill_level, @eligible_card_levels.collect{|level| [level, level]}
+    .field
+      = f.label "Target percentage"
+      = f.text_field :target_percentage, :size=>4, :maxlength=>4
+      \%
     .actions
       = f.submit 'Show me skill-up strategies'
 
