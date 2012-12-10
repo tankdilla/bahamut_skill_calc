@@ -19,10 +19,14 @@ class Calcer
       strategies = Array.new
       
       strategies << set_up_strategy(
-              "Max feeder rare, max skill 4", 
+              "Max feeder high normal, max skill 1", 
               card_at_target_skill_lvl,
               options.merge(:max_feeder_level=>'high_normal', :highest_feeder_skill_level=>1))
-
+              
+      strategies << set_up_strategy(
+              "Max feeder high normal, max skill 3", 
+              card_at_target_skill_lvl,
+              options.merge(:max_feeder_level=>'high_normal', :highest_feeder_skill_level=>3))
 
       card_strategy = set_up_strategy(
               "Same card level or less, Skill less than or equal to target skill", 
